@@ -9,7 +9,7 @@ const player = {
     speed: 10,
     image: new Image()
 };
-player.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/player.png';
+player.image.src = 'assets/player.png';
 
 let enemies = [];
 let lasers = [];
@@ -176,7 +176,7 @@ function shootLaser() {
         speed: 10,
         image: new Image()
     };
-    laser.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/laserRed.png';
+    laser.image.src = 'assets/laserRed.png';
     lasers.push(laser);
 }
 
@@ -189,7 +189,7 @@ function spawnEnemies() {
             height: 50,
             image: new Image()
         };
-        enemy.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/enemyShip.png';
+        enemy.image.src = '/assets/enemyShip.png';
         enemies.push(enemy);
     }
 }
