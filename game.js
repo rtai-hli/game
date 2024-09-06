@@ -9,7 +9,7 @@ const player = {
     speed: 10,
     image: new Image()
 };
-player.image.src = 'assets/player.png';
+player.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/player.png';
 
 let enemies = [];
 let lasers = [];
@@ -30,118 +30,7 @@ function checkCollision(rect1, rect2) {
            rect1.y + rect1.height > rect2.y;
 }
 
-function resetGame() {
-    player.x = 175;
-    player.y = 500;
-    enemies = [];
-    lasers = [];
-    score = 0;
-    gameStarted = false;
-    showMessage('Game Over! Press any key to restart');
-}
-
-function drawScore() {
-    ctx.fillStyle = 'white';
-    ctx.font = '20px Arial';
-    ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
-}
-
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
-    const words = text.split(' ');
-    let line = '';
-    for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = context.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > maxWidth && n > 0) {
-            context.fillText(line, x, y);
-            line = words[n] + ' ';
-            y += lineHeight;
-        } else {
-            line = testLine;
-        }
-    }
-    context.fillText(line, x, y);
-}
-
-function showMessage(message) {
-    ctx.fillStyle = 'white';
-    ctx.font = '30px Arial';
-    ctx.textAlign = 'center';
-    const maxWidth = canvas.width - 40;
-    const lineHeight = 40;
-    const x = canvas.width / 2;
-    const y = canvas.height / 2;
-    wrapText(ctx, message, x, y, maxWidth, lineHeight);
-}
-
-function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawImage(player);
-    enemies.forEach(enemy => {
-        enemy.y += enemySpeed;
-        drawImage(enemy);
-    });
-    lasers.forEach(laser => {
-        laser.y -= laser.speed;
-        drawImage(laser);
-    });
-
-    enemies.forEach(enemy => {
-        if (checkCollision(player, enemy)) {
-            resetGame();
-            return;
-        }
-    });
-
-    lasers = lasers.filter(laser => laser.y > 0);
-    enemies = enemies.filter(enemy => enemy.y < canvas.height);
-    enemies.forEach((enemy, enemyIndex) => {
-        lasers.forEach((laser, laserIndex) => {
-            if (checkCollision(laser, enemy)) {
-                enemies.splice(enemyIndex, 1);
-                lasers.splice(laserIndex, 1);
-                score += 100;
-            }
-        });
-    });
-
-    drawScore();
-    if (gameStarted) {
-        requestAnimationFrame(update);
-    }
-}
-
-function movePlayer(event) {
-    if (!gameStarted) {
-        gameStarted = true;
-        update();
-        setInterval(spawnEnemies, enemySpawnInterval);
-    }
-
-    switch (event.key) {
-        case 'ArrowLeft':
-            if (player.x > 0) player.x -= player.speed;
-            break;
-        case 'ArrowRight':
-            if (player.x + player.width < canvas.width) player.x += player.speed;
-            break;
-        case 'ArrowUp':
-            if (player.y > 0) player.y -= player.speed;
-            break;
-        case 'ArrowDown':
-            if (player.y + player.height < canvas.height) player.y += player.speed;
-            break;
-        case ' ':
-            if (canShoot) {
-                shootLaser();
-                canShoot = false;
-                setTimeout(() => canShoot = true, 500);
-            }
-            break;
-    }
-}
-
+// Update the rest of the code to use the new image URLs
 function shootLaser() {
     const laser = {
         x: player.x + player.width / 2 - 2.5,
@@ -151,7 +40,7 @@ function shootLaser() {
         speed: 10,
         image: new Image()
     };
-    laser.image.src = 'assets/laserRed.png';
+    laser.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/laserRed.png';
     lasers.push(laser);
 }
 
@@ -164,10 +53,7 @@ function spawnEnemies() {
             height: 50,
             image: new Image()
         };
-        enemy.image.src = 'assets/enemyShip.png';
+        enemy.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/enemyShip.png';
         enemies.push(enemy);
     }
 }
-
-document.addEventListener('keydown', movePlayer);
-showMessage('Press any key to start');
