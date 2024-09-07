@@ -168,7 +168,7 @@ function movePlayer(event) {
             if (canShoot) {
                 shootLaser();
                 canShoot = false;
-                setTimeout(() => canShoot = true, 150); // Reduced interval from 500 to 250 milliseconds
+                setTimeout(() => canShoot = true, 250); // Reduced interval from 500 to 250 milliseconds
             }
             break;
     }
@@ -201,6 +201,27 @@ function spawnEnemies() {
     }
 }
 
+document.addEventListener('keyup', stopMoving);
+
+function startMoving(direction) {
+    moveInterval = setInterval(() => movePlayer({ key: direction }), 100);
+}
+
+function stopMoving() {
+    clearInterval(moveInterval);
+}
+
+function startShooting() {
+    // Handle single tap/press
+    shootLaser();
+    // Handle press-and-hold
+    shootInterval = setInterval(() => shootLaser(), 250); // Reduced interval from 500 to 250 milliseconds
+}
+
+function stopShooting() {
+    clearInterval(shootInterval);
+}
+
 // Add event listeners for mobile controls
 document.getElementById('left').addEventListener('touchstart', () => startMoving('ArrowLeft'));
 document.getElementById('right').addEventListener('touchstart', () => startMoving('ArrowRight'));
@@ -222,23 +243,4 @@ document.addEventListener('keydown', (event) => {
     }
     movePlayer(event);
 });
-
-document.addEventListener('keyup', stopMoving);
-
-function startMoving(direction) {
-    moveInterval = setInterval(() => movePlayer({ key: direction }), 100);
-}
-
-function stopMoving() {
-    clearInterval(moveInterval);
-}
-
-function startShooting() {
-    shootInterval = setInterval(() => movePlayer({ key: ' ' }), 250); // Reduced interval from 500 to 250 milliseconds
-}
-
-function stopShooting() {
-    clearInterval(shootInterval);
-}
-
 showMessage('Press any key to start');
