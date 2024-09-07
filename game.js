@@ -193,7 +193,7 @@ function spawnEnemies() {
             height: 50,
             image: new Image()
         };
-        enemy.image.src = 'enemyShip.png';
+        enemy.image.src = 'assets/enemyShip.png';
         enemies.push(enemy);
     }
 }
