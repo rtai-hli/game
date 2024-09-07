@@ -6,7 +6,7 @@ const player = {
     y: 500,
     width: 50,
     height: 50,
-    speed: 20,
+    speed: 10,
     image: new Image()
 };
 player.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/player.png';
@@ -21,9 +21,6 @@ const enemySpeed = 2;
 const enemySpawnInterval = 3000; // 3 seconds
 let enemySpawnIntervalId; // Store the interval ID
 
-let moveInterval;
-let shootInterval;
-
 function drawImage(obj) {
     ctx.drawImage(obj.image, obj.x, obj.y, obj.width, obj.height);
 }
@@ -32,7 +29,7 @@ function checkCollision(rect1, rect2) {
     return rect1.x < rect2.x + rect2.width &&
            rect1.x + rect1.width > rect2.x &&
            rect1.y < rect2.y + rect2.height &&
-           rect1.y + rect1.height > rect2.y;
+           rect1.y + rect2.height > rect2.y;
 }
 
 function resetGame() {
@@ -201,39 +198,12 @@ function spawnEnemies() {
     }
 }
 
-document.addEventListener('keyup', stopMoving);
-
-function startMoving(direction) {
-    moveInterval = setInterval(() => movePlayer({ key: direction }), 100);
-}
-
-function stopMoving() {
-    clearInterval(moveInterval);
-}
-
-function startShooting() {
-    // Handle single tap/press
-    shootLaser();
-    // Handle press-and-hold
-    shootInterval = setInterval(() => shootLaser(), 250); // Reduced interval from 500 to 250 milliseconds
-}
-
-function stopShooting() {
-    clearInterval(shootInterval);
-}
-
 // Add event listeners for mobile controls
-document.getElementById('left').addEventListener('touchstart', () => startMoving('ArrowLeft'));
-document.getElementById('right').addEventListener('touchstart', () => startMoving('ArrowRight'));
-document.getElementById('up').addEventListener('touchstart', () => startMoving('ArrowUp'));
-document.getElementById('down').addEventListener('touchstart', () => startMoving('ArrowDown'));
-document.getElementById('shoot').addEventListener('touchstart', startShooting);
-
-document.getElementById('left').addEventListener('touchend', stopMoving);
-document.getElementById('right').addEventListener('touchend', stopMoving);
-document.getElementById('up').addEventListener('touchend', stopMoving);
-document.getElementById('down').addEventListener('touchend', stopMoving);
-document.getElementById('shoot').addEventListener('touchend', stopShooting);
+document.getElementById('left').addEventListener('touchstart', () => movePlayer({ key: 'ArrowLeft' }));
+document.getElementById('right').addEventListener('touchstart', () => movePlayer({ key: 'ArrowRight' }));
+document.getElementById('up').addEventListener('touchstart', () => movePlayer({ key: 'ArrowUp' }));
+document.getElementById('down').addEventListener('touchstart', () => movePlayer({ key: 'ArrowDown' }));
+document.getElementById('shoot').addEventListener('touchstart', () => movePlayer({ key: ' ' }));
 
 document.addEventListener('keydown', (event) => {
     if (!gameStarted) {
@@ -243,4 +213,5 @@ document.addEventListener('keydown', (event) => {
     }
     movePlayer(event);
 });
+
 showMessage('Press any key to start');
