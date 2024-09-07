@@ -28,7 +28,7 @@ function checkCollision(rect1, rect2) {
     return rect1.x < rect2.x + rect2.width &&
            rect1.x + rect1.width > rect2.x &&
            rect1.y < rect2.y + rect2.height &&
-           rect1.y + rect1.height > rect2.y;
+           rect1.y + rect2.height > rect2.y;
 }
 
 function resetGame() {
@@ -82,6 +82,8 @@ function showMessage(message) {
     const x = canvas.width / 2;
     const y = canvas.height / 2;
     wrapText(ctx, message, x, y, maxWidth, lineHeight);
+    ctx.font = '20px Arial';
+    wrapText(ctx, 'Use arrow keys or buttons to move. Press space or button to shoot.', x, y + 60, maxWidth, lineHeight);
 }
 
 function isTopScore(score) {
@@ -173,7 +175,7 @@ function shootLaser() {
         y: player.y,
         width: 5,
         height: 20,
-        speed: 10,
+        speed: 20,
         image: new Image()
     };
     laser.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/laserRed.png';
@@ -193,6 +195,13 @@ function spawnEnemies() {
         enemies.push(enemy);
     }
 }
+
+// Add event listeners for mobile controls
+document.getElementById('left').addEventListener('touchstart', () => movePlayer({ key: 'ArrowLeft' }));
+document.getElementById('right').addEventListener('touchstart', () => movePlayer({ key: 'ArrowRight' }));
+document.getElementById('up').addEventListener('touchstart', () => movePlayer({ key: 'ArrowUp' }));
+document.getElementById('down').addEventListener('touchstart', () => movePlayer({ key: 'ArrowDown' }));
+document.getElementById('shoot').addEventListener('touchstart', () => movePlayer({ key: ' ' }));
 
 document.addEventListener('keydown', movePlayer);
 showMessage('Press any key to start');

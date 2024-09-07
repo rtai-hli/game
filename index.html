@@ -4,10 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background: black;
+        }
+        .control-button {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            line-height: 50px;
+            user-select: none;
+        }
+        #left {
+            bottom: 50px;
+            left: 20px;
+        }
+        #right {
+            bottom: 50px;
+            left: 80px;
+        }
+        #up {
+            bottom: 80px;
+            left: 50px;
+        }
+        #down {
+            bottom: 20px;
+            left: 50px;
+        }
+        #shoot {
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <button id="left" class="control-button">←</button>
+    <button id="right" class="control-button">→</button>
+    <button id="up" class="control-button">↑</button>
+    <button id="down" class="control-button">↓</button>
+    <button id="shoot" class="control-button">●</button>
     <script src="game.js"></script>
 </body>
 </html>
