@@ -6,7 +6,7 @@ const player = {
     y: 500,
     width: 50,
     height: 50,
-    speed: 10,
+    speed: 20,
     image: new Image()
 };
 player.image.src = 'https://raw.githubusercontent.com/microsoft/Web-Dev-For-Beginners/main/6-space-game/6-end-condition/your-work/assets/player.png';
@@ -168,7 +168,7 @@ function movePlayer(event) {
             if (canShoot) {
                 shootLaser();
                 canShoot = false;
-                setTimeout(() => canShoot = true, 250); // Reduced interval from 500 to 250 milliseconds
+                setTimeout(() => canShoot = true, 150); // Reduced interval from 500 to 250 milliseconds
             }
             break;
     }
