@@ -19,6 +19,10 @@ let score = 0;
 let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
 const enemySpeed = 2;
 const enemySpawnInterval = 3000; // 3 seconds
+let enemySpawnIntervalId; // Store the interval ID
+
+let moveInterval;
+let shootInterval;
 
 function drawImage(obj) {
     ctx.drawImage(obj.image, obj.x, obj.y, obj.width, obj.height);
@@ -28,7 +32,7 @@ function checkCollision(rect1, rect2) {
     return rect1.x < rect2.x + rect2.width &&
            rect1.x + rect1.width > rect2.x &&
            rect1.y < rect2.y + rect2.height &&
-           rect1.y + rect2.height > rect2.y;
+           rect1.y + rect1.height > rect2.y;
 }
 
 function resetGame() {
@@ -42,6 +46,7 @@ function resetGame() {
     lasers = [];
     score = 0;
     gameStarted = false;
+    clearInterval(enemySpawnIntervalId); // Clear the interval when the game resets
     showMessage('Game Over! Press any key to restart');
 }
 
@@ -83,7 +88,7 @@ function showMessage(message) {
     const y = canvas.height / 2;
     wrapText(ctx, message, x, y, maxWidth, lineHeight);
     ctx.font = '20px Arial';
-    wrapText(ctx, 'Use arrow keys or buttons to move. Press space or button to shoot.', x, y + 60, maxWidth, lineHeight);
+    wrapText(ctx, 'Use arrow keys or buttons to move. Press space or button to shoot.', x, y + 80, maxWidth, lineHeight);
 }
 
 function isTopScore(score) {
@@ -143,7 +148,7 @@ function movePlayer(event) {
     if (!gameStarted) {
         gameStarted = true;
         update();
-        setInterval(spawnEnemies, enemySpawnInterval);
+        enemySpawnIntervalId = setInterval(spawnEnemies, enemySpawnInterval); // Set the interval only once
     }
 
     switch (event.key) {
@@ -163,7 +168,7 @@ function movePlayer(event) {
             if (canShoot) {
                 shootLaser();
                 canShoot = false;
-                setTimeout(() => canShoot = true, 500);
+                setTimeout(() => canShoot = true, 250); // Reduced interval from 500 to 250 milliseconds
             }
             break;
     }
@@ -197,11 +202,43 @@ function spawnEnemies() {
 }
 
 // Add event listeners for mobile controls
-document.getElementById('left').addEventListener('touchstart', () => movePlayer({ key: 'ArrowLeft' }));
-document.getElementById('right').addEventListener('touchstart', () => movePlayer({ key: 'ArrowRight' }));
-document.getElementById('up').addEventListener('touchstart', () => movePlayer({ key: 'ArrowUp' }));
-document.getElementById('down').addEventListener('touchstart', () => movePlayer({ key: 'ArrowDown' }));
-document.getElementById('shoot').addEventListener('touchstart', () => movePlayer({ key: ' ' }));
+document.getElementById('left').addEventListener('touchstart', () => startMoving('ArrowLeft'));
+document.getElementById('right').addEventListener('touchstart', () => startMoving('ArrowRight'));
+document.getElementById('up').addEventListener('touchstart', () => startMoving('ArrowUp'));
+document.getElementById('down').addEventListener('touchstart', () => startMoving('ArrowDown'));
+document.getElementById('shoot').addEventListener('touchstart', startShooting);
 
-document.addEventListener('keydown', movePlayer);
+document.getElementById('left').addEventListener('touchend', stopMoving);
+document.getElementById('right').addEventListener('touchend', stopMoving);
+document.getElementById('up').addEventListener('touchend', stopMoving);
+document.getElementById('down').addEventListener('touchend', stopMoving);
+document.getElementById('shoot').addEventListener('touchend', stopShooting);
+
+document.addEventListener('keydown', (event) => {
+    if (!gameStarted) {
+        gameStarted = true;
+        update();
+        enemySpawnIntervalId = setInterval(spawnEnemies, enemySpawnInterval); // Set the interval only once
+    }
+    movePlayer(event);
+});
+
+document.addEventListener('keyup', stopMoving);
+
+function startMoving(direction) {
+    moveInterval = setInterval(() => movePlayer({ key: direction }), 100);
+}
+
+function stopMoving() {
+    clearInterval(moveInterval);
+}
+
+function startShooting() {
+    shootInterval = setInterval(() => movePlayer({ key: ' ' }), 250); // Reduced interval from 500 to 250 milliseconds
+}
+
+function stopShooting() {
+    clearInterval(shootInterval);
+}
+
 showMessage('Press any key to start');
